@@ -1,0 +1,329 @@
+﻿Build1=Default,b4a.pro
+File1=1.bal
+File10=info1.png
+File11=led off.png
+File12=led on.png
+File13=menu1.png
+File14=nodemcu2.png
+File15=share1.png
+File16=singout1.png
+File17=singout3.png
+File18=swtting1.png
+File19=wrench.png
+File2=agac1.png
+File20=wrench_orange.png
+File3=B4A-ESP8266_Local_Web_Mqtt-v1.bal
+File4=bomb.png
+File5=book_add.png
+File6=book_open.png
+File7=datetimelayout.bal
+File8=home1.png
+File9=ic_action_menu.png
+FileGroup1=Default Group
+FileGroup10=Default Group
+FileGroup11=Default Group
+FileGroup12=Default Group
+FileGroup13=Default Group
+FileGroup14=Default Group
+FileGroup15=Default Group
+FileGroup16=Default Group
+FileGroup17=Default Group
+FileGroup18=Default Group
+FileGroup19=Default Group
+FileGroup2=Default Group
+FileGroup20=Default Group
+FileGroup3=Default Group
+FileGroup4=Default Group
+FileGroup5=Default Group
+FileGroup6=Default Group
+FileGroup7=Default Group
+FileGroup8=Default Group
+FileGroup9=Default Group
+Group=Default Group
+Library1=animation
+Library2=core
+Library3=javaobject
+Library4=xcustomlistview
+Library5=xui
+Library6=jmqtt
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: https://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="29"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~CreateResourceFromFile(Macro, Themes.DarkTheme)~\n~'End of default text.~\n~CreateResourceFromFile(Macro, Core.NetworkClearText)
+Module1=DateTimePicker
+Module2=SlideMenu
+Module3=Starter
+NumberOfFiles=20
+NumberOfLibraries=6
+NumberOfModules=3
+Version=12.5
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: ESP8266 Controller.v1.041023
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: False
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+	
+End Sub
+
+Sub Globals
+	'These global variables will be redeclared each time the activity is created.
+	'These variables can only be accessed from this module.
+	
+	Dim WB As WebView
+	Private EditTextIP As EditText
+	Private EditText1 As EditText
+	Private EditText2 As EditText
+	Private EditText3 As EditText
+	Private EditText4 As EditText
+	Private ToggleButton1 As ToggleButton
+	Private ToggleButton2 As ToggleButton
+	Private ToggleButton3 As ToggleButton
+	Private ToggleButton4 As ToggleButton
+	
+	Dim ImgToggleButton1 As BitmapDrawable
+	Dim ImgToggleButton2 As BitmapDrawable
+	Dim ImgToggleButton3 As BitmapDrawable
+	Dim ImgToggleButton4 As BitmapDrawable
+	Dim sm As SlideMenu
+	
+	
+	Private EditText_ay As EditText
+	Private EditText_dk As EditText
+	Private EditText_gun As EditText
+	Private EditText_saat As EditText
+	Private EditText_yil As EditText
+	Private lblTemperature As Label
+	Private lblState As Label
+	Private lblamba As Label
+End Sub
+
+Public Sub Initialize
+	'Timer1.Initialize("Timer1",1000)
+	'Timer1.Enabled = True
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'Do not forget to load the layout file created with the visual designer. For example:
+	'Activity.LoadLayout("Layout1")
+	Activity.LoadLayout("B4A-ESP8266_Local_Web_Mqtt-v1")
+	
+	sm.Initialize(Activity, Me, "SlideMenu", 42dip, 180dip)
+
+	sm.AddItem("HOME PAGE", LoadBitmap(File.DirAssets, "bomb.png"), 1)
+	sm.AddItem("Item #2", LoadBitmap(File.DirAssets, "book_add.png"), 2)
+	sm.AddItem("Item #3", LoadBitmap(File.DirAssets, "book_open.png"), 3)
+	sm.AddItem("PROFILE", LoadBitmap(File.DirAssets, "wrench.png"), 4)
+	sm.AddItem("SETTINGS", LoadBitmap(File.DirAssets, "wrench_orange.png"), 5)
+	sm.AddItem("BACK #6", Null, 6)
+	sm.AddItem("SING OUT #7", Null, 7)
+	
+	
+	'Private cd As ColorDrawable
+	'cd.Initialize(Colors.Transparent, 0)
+	'EditTextIP.Background = cd
+	
+	WB.Initialize("WB")
+	
+	ImgToggleButton1.Initialize(LoadBitmap(File.DirAssets, "Led OFF.png"))
+	ImgToggleButton1.Gravity = Gravity.FILL
+	ToggleButton1.Background = ImgToggleButton1
+	
+	ImgToggleButton2.Initialize(LoadBitmap(File.DirAssets, "Led OFF.png"))
+	ImgToggleButton2.Gravity = Gravity.FILL
+	ToggleButton2.Background = ImgToggleButton2
+	
+	ImgToggleButton3.Initialize(LoadBitmap(File.DirAssets, "Led OFF.png"))
+	ImgToggleButton3.Gravity = Gravity.FILL
+	ToggleButton3.Background = ImgToggleButton3
+	
+	ImgToggleButton4.Initialize(LoadBitmap(File.DirAssets, "Led OFF.png"))
+	ImgToggleButton4.Gravity = Gravity.FILL
+	ToggleButton4.Background = ImgToggleButton4
+End Sub
+
+Public Sub SetState
+	If Starter.mqtt.Connected Then
+		lblState.Text = "Connected"
+		lblTemperature.Text = $"Temperature: $1.1{Starter.temperature} °C"$
+		lblamba.Text = $"lamba: $1.1{Starter.lamba} °z"$
+	Else
+		lblState.Text = "Disconnected"
+		lblTemperature.Text = "Temperature: N/A"
+	End If
+
+	If Starter.lamba = 1 Then
+		ImgToggleButton4.Initialize(LoadBitmap(File.DirAssets, "Led ON.png"))
+		ImgToggleButton4.Gravity = Gravity.FILL
+		ToggleButton4.Background = ImgToggleButton4
+	Else
+		ImgToggleButton4.Initialize(LoadBitmap(File.DirAssets, "Led OFF.png"))
+		ImgToggleButton4.Gravity = Gravity.FILL
+		ToggleButton4.Background = ImgToggleButton4
+	End If
+	
+End Sub
+Sub ToggleButton1_CheckedChange(Checked As Boolean)
+	If EditText1.Text = "" Then
+		ToastMessageShow("IP address cannot be empty !", False)
+		Return
+	End If
+	If Checked = False Then
+		ImgToggleButton1.Initialize(LoadBitmap(File.DirAssets, "Led OFF.png"))
+		ImgToggleButton1.Gravity = Gravity.FILL
+		ToggleButton1.Background = ImgToggleButton1
+		
+		WB.LoadUrl("http://" & EditText1.Text & "/Relay01=0") ' esp ye digen kod
+		
+		'ToastMessageShow("LED1 Off", False)
+	Else
+		ImgToggleButton1.Initialize(LoadBitmap(File.DirAssets, "Led ON.png"))
+		ImgToggleButton1.Gravity = Gravity.FILL
+		ToggleButton1.Background = ImgToggleButton1
+		
+		WB.LoadUrl("http://" & EditText1.Text & "/Relay01=1")
+		
+		'ToastMessageShow("LED1 On", False)
+	End If
+End Sub
+
+Sub ToggleButton2_CheckedChange(Checked As Boolean)
+	If EditText2.Text = "" Then
+		ToastMessageShow("IP cannot be empty !", False)
+		Return
+	End If
+	If Checked = False Then
+		ImgToggleButton2.Initialize(LoadBitmap(File.DirAssets, "Led OFF.png"))
+		ImgToggleButton2.Gravity = Gravity.FILL
+		ToggleButton2.Background = ImgToggleButton2
+		
+		WB.LoadUrl("http://" & EditText2.Text & "/Relay01=0") ' esp ye digen kod 
+		
+		'ToastMessageShow("LED2 Off", False)
+	Else
+		ImgToggleButton2.Initialize(LoadBitmap(File.DirAssets, "Led ON.png"))
+		ImgToggleButton2.Gravity = Gravity.FILL
+		ToggleButton2.Background = ImgToggleButton2
+		
+		WB.LoadUrl("http://" & EditText2.Text & "/Relay01=1")  
+		WB.LoadUrl("http://" & EditText_dk.Text & "/204_dk")
+		
+		'ToastMessageShow("LED2 On", False)
+	End If
+End Sub
+
+Sub ToggleButton3_CheckedChange(Checked As Boolean)
+	If EditText3.Text = "" Then
+		ToastMessageShow("IP cannot be empty !", False)
+		Return
+	End If
+	If Checked = False Then
+		ImgToggleButton3.Initialize(LoadBitmap(File.DirAssets, "Led OFF.png"))
+		ImgToggleButton3.Gravity = Gravity.FILL
+		ToggleButton3.Background = ImgToggleButton3
+		
+		WB.LoadUrl("http://" & EditText3.Text & "/Relay01=0") ' esp ye digen kod
+		
+		'ToastMessageShow("LED2 Off", False)
+	Else
+		ImgToggleButton3.Initialize(LoadBitmap(File.DirAssets, "Led ON.png"))
+		ImgToggleButton3.Gravity = Gravity.FILL
+		ToggleButton3.Background = ImgToggleButton3
+		
+		WB.LoadUrl("http://" & EditText3.Text & "/Relay01=1")
+		
+		'ToastMessageShow("LED2 On", False)
+	End If
+	
+End Sub
+
+Sub ToggleButton4_CheckedChange(Checked As Boolean)
+
+	If Checked = False Then
+		lblamba.Text = $"lamba: $1.1{0} °C"$
+		WB.LoadUrl("http://" & EditText4.Text & "/Relay02=0")
+		Dim message As String = "1"
+		Dim bytes() As Byte = message.GetBytes("UTF-8")
+
+
+			Dim message As String = "1"
+			Dim bytes() As Byte = message.GetBytes("UTF-8")
+
+			Starter.mqtt.Publish("encan/feeds/light", bytes)
+
+	Else
+		lblamba.Text = $"lamba: $1.1{1} °C"$
+		WB.LoadUrl("http://" & EditText4.Text & "/Relay02=1")
+
+		Dim message As String = "0"
+		Dim bytes() As Byte = message.GetBytes("UTF-8")
+
+		Starter.mqtt.Publish("encan/feeds/light", bytes)
+
+	End If
+End Sub
+
+
+Sub Activity_Resume
+	SetState
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Sub Activity_KeyPress (KeyCode As Int) As Boolean
+	'Pressing the back key while the slidemenu is open will close it
+	If KeyCode = KeyCodes.KEYCODE_BACK And sm.isVisible Then
+		sm.Hide
+		Return True
+	End If
+
+	'Pressing the menu key will open/close the slidemenu
+	If KeyCode = KeyCodes.KEYCODE_MENU Then
+		If sm.isVisible Then sm.Hide Else sm.Show
+		Return True
+	End If
+End Sub
+
+'Show the slidemenu
+Sub btnShow_Click
+	sm.Show
+
+End Sub
+
+'Event sub which is called when an item in the slidemenu is clicked
+Sub SlideMenu_Click(Item As Object)
+	
+	'ToastMessageShow("Item clicked: " & Item, False)
+	
+	Select Item
+		Case 1
+	ToastMessageShow("clicked : HOME PAGE", True)
+			Activity.LoadLayout("1")
+			'StartActivity(1)
+		Case 2
+	ToastMessageShow("clicked : 2", True)
+		Case 3
+			ToastMessageShow("clicked : 3", True)
+		Case 4
+			ToastMessageShow("clicked : 4", True)
+		Case 5
+			ToastMessageShow("clicked : SETTINGS", True)
+			Activity.LoadLayout("datetimelayout")
+		Case 6
+			ToastMessageShow("clicked : LAY1", True)
+			Activity.LoadLayout("Lay1")
+			
+	
+	End Select
+End Sub
